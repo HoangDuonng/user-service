@@ -1,0 +1,16 @@
+spring:
+  application:
+    name: user_service
+  datasource:
+    url: ${URL-DB:jdbc:postgresql://localhost:5432/db-user}
+    username: ${DB_USERNAME:postgres}
+    password: ${DB_PASSWORD:123456}
+
+  liquibase:
+    change-log: ${CHANGE_LOG:classpath:db/changelogs/master-changelog.xml}
+    enabled: true
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
