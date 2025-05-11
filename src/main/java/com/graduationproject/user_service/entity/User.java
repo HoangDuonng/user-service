@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import lombok.EqualsAndHashCode;
 
 @Entity
@@ -22,9 +21,6 @@ public class User extends BaseEntity {
 
     @Column(nullable = false, unique = true)
     private String email;
-
-    @Column(nullable = false)
-    private String password;
 
     @Column(name = "first_name", length = 100)
     private String firstName;
