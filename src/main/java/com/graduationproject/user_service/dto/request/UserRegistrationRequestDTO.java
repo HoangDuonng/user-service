@@ -26,11 +26,17 @@ public class UserRegistrationRequestDTO {
     @Size(min = 2, max = 100, message = "Full name must be between 2 and 100 characters")
     private String fullName;
 
+    @Size(max = 50, message = "First name cannot exceed 50 characters")
+    private String first_name;
+
+    @Size(max = 50, message = "Last name cannot exceed 50 characters")
+    private String last_name;
+
     @Pattern(
         regexp = "^(84|0[3|5|7|8|9])+([0-9]{8})$",
         message = "Invalid Vietnamese phone number format"
     )
-    private String phoneNumber;
+    private String phone;
 
     @Size(max = 500, message = "Address cannot exceed 500 characters")
     private String address;

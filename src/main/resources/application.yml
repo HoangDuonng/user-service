@@ -41,6 +41,27 @@ spring:
     template:
       mandatory: true
 
+rabbitmq:
+  queue:
+    auth-login: auth-login-queue
+    auth-login-response: auth-login-response-queue
+    user-created-auth: user-created-auth-queue
+    user-created-authorization: user-created-authorization-queue
+  exchange:
+    user-events: user-events-exchange
+    auth-events: auth-events-exchange
+  routing-key:
+    user-created-auth: user.created.auth
+    user-created-authorization: user.created.authorization
+    auth-login: auth.login
+    auth-login-response: auth.login.response
+
+jwt:
+  secret: ${JWT_SECRET:7mCfe6wr7rOBhY6S3vrWyR8dBXFy9iTOmbjlREl0yxASqKgpzKfIl0CGpGjMVuL/O++QZGIBwGQNzyphuN8yyqIbacdY+7n+6KZTY3xQdh16C8Kdzjt01mg6tKywGgaNTG1nLUhQVUb/INOIkqMIk4lVXyTbnGU9RFWCxYvQbHN2/BcaOUQm/SM0Fb6nk96JQZoavlrUqCGyEyoCXXTATjW7bnkEbp5mP3w9p+MvRED5nkGMC7LvMwfag8rOFvTCPcsqjgE+Y/MLfqTJprQpn2nbcMAj2AQAUbtPIY1UXe37IVA2qy/fzs5urnspX37fb6W7bnhIBn4hA6zudvQ==}
+  expiration: ${JWT_EXPIRATION:86400000}
+  refresh-token:
+    expiration: ${JWT_REFRESH_TOKEN_EXPIRATION:604800000}
+
 server:
   port: ${SERVER_PORT:8080}
   servlet:
@@ -66,15 +87,11 @@ logging:
     file: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n"
 
 auth-service:
-  url: ${AUTH_SERVICE_URL:http://localhost:8081/api}
+  url: ${AUTH_SERVICE_URL:http://localhost:8081}
 
-rabbitmq:
-  queue:
-    user-created: ${RABBITMQ_QUEUE_USER_CREATED:user.created}
-  exchange:
-    user-events: ${RABBITMQ_EXCHANGE_USER_EVENTS:user.events}
-  routing-key:
-    user-created: ${RABBITMQ_ROUTING_KEY_USER_CREATED:user.created}
+authorization-service:
+  url: ${AUTHORIZATION_SERVICE_URL:http://localhost:8082}
+  token: ${USER_SERVICE_TOKEN:service-auth-2024-secret-key}
 
 ---
 spring:
