@@ -24,21 +24,3 @@ public class ErrorResponse {
         this.timestamp = timestamp;
     }
 }
-
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
-@EqualsAndHashCode(callSuper = true)
-class ValidationErrorResponse extends ErrorResponse {
-    private Map<String, String> errors;
-
-    public ValidationErrorResponse(int status, String message, LocalDateTime timestamp, String path, Map<String, String> errors) {
-        super(status, message, timestamp, path);
-        this.errors = errors;
-    }
-
-    public ValidationErrorResponse(int status, String message, LocalDateTime timestamp, Map<String, String> errors) {
-        super(status, message, timestamp);
-        this.errors = errors;
-    }
-} 
