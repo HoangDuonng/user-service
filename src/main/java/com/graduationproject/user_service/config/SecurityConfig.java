@@ -1,5 +1,8 @@
 package com.graduationproject.user_service.config;
 
+import com.graduationproject.user_service.filter.JwtAuthenticationFilter;
+import com.graduationproject.user_service.filter.ServiceAuthenticationFilter;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
@@ -14,38 +17,55 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @EnableWebSecurity
 public class SecurityConfig {
 
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
+        @Autowired
+        private JwtAuthenticationFilter jwtAuthenticationFilter;
 
-    @Bean
-    @Profile("dev")
-    public SecurityFilterChain devSecurityFilterChain(HttpSecurity http) throws Exception {
-        return http
-            .csrf(csrf -> csrf.disable())
-            .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-            .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/api/**").permitAll()
-                .anyRequest().permitAll()
-            )
-            .build();
-    }
+        @Autowired
+        private ServiceAuthenticationFilter serviceAuthenticationFilter;
 
-    @Bean
-    @Profile("prod")
-    public SecurityFilterChain prodSecurityFilterChain(HttpSecurity http) throws Exception {
-        return http
-            .csrf(csrf -> csrf.disable())
-            .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-            .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/api/users/register").permitAll()
-                .requestMatchers("/api/users/{id}").authenticated()
-                .requestMatchers("/api/users/username/{username}").authenticated()
-                .requestMatchers("/api/users").authenticated()
-                .anyRequest().denyAll()
-            )
-            .httpBasic(basic -> {})
-            .build();
-    }
-} 
+        @Bean
+        public PasswordEncoder passwordEncoder() {
+                return new BCryptPasswordEncoder();
+        }
+
+        @Bean
+        @Profile("dev")
+        public SecurityFilterChain devSecurityFilterChain(HttpSecurity http) throws Exception {
+                return http
+                                .csrf(csrf -> csrf.disable())
+                                .sessionManagement(session -> session
+                                                .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                                .authorizeHttpRequests(auth -> auth
+                                                // .requestMatchers("/api/**").permitAll()
+                                                .requestMatchers("/api/users/register").permitAll()
+                                                .requestMatchers("/api/users/{id}").authenticated()
+                                                .requestMatchers("/api/users/username/{username}").authenticated()
+                                                // .requestMatchers("/api/users").authenticated()
+                                                .anyRequest().permitAll())
+                                .build();
+        }
+
+        @Bean
+        @Profile("prod")
+        public SecurityFilterChain prodSecurityFilterChain(HttpSecurity http) throws Exception {
+                return http
+                                .csrf(csrf -> csrf.disable())
+                                .sessionManagement(session -> session
+                                                .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                                .authorizeHttpRequests(auth -> auth
+                                                .requestMatchers("/api/users/register").permitAll()
+                                                .requestMatchers("/api/users/{id}").hasAnyRole("SERVICE", "USER")
+                                                .requestMatchers("/api/users/username/{username}")
+                                                .hasAnyRole("SERVICE", "USER")
+                                                .requestMatchers("/api/users").hasAnyRole("SERVICE", "USER")
+                                                .requestMatchers("/api/users/active").hasAnyRole("SERVICE", "USER")
+                                                .anyRequest().denyAll())
+                                .addFilterBefore(serviceAuthenticationFilter,
+                                                org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter.class)
+                                .addFilterBefore(jwtAuthenticationFilter,
+                                                org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter.class)
+                                .httpBasic(basic -> {
+                                })
+                                .build();
+        }
+}

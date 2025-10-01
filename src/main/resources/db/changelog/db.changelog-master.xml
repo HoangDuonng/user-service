@@ -5,17 +5,9 @@
     xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
                       http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
 
-    <!-- Include all migration files in order -->
-    <changeSet id="1" author="hoangduong">
+    <!-- Include initial schema -->
+    <changeSet id="1" author="hoangduonng">
         <sqlFile path="classpath:db/migration/V1__init_schema.sql"/>
-    </changeSet>
-    
-    <changeSet id="2" author="hoangduong">
-        <sqlFile path="classpath:db/migration/V2__add_sample_data.sql"/>
-    </changeSet>
-
-    <changeSet id="3" author="hoangduong">
-        <sqlFile path="classpath:db/migration/V3__remove_password_column.sql"/>
     </changeSet>
 
 </databaseChangeLog> 

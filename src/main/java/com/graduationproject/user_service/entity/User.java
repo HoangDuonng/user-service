@@ -46,9 +46,6 @@ public class User extends BaseEntity {
     @Column(name = "phone", length = 20)
     private String phone;
 
-    @Column(name = "phone_number")
-    private String phoneNumber;
-
     @Column
     private LocalDate dob;
 

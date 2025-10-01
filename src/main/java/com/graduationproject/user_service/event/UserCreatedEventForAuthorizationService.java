@@ -9,9 +9,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserCreatedEvent {
-    private String userId;
-    private String username;
-    private String email;
-    private String password;
+public class UserCreatedEventForAuthorizationService {
+    private Long userId;
+    private String role;
 }
